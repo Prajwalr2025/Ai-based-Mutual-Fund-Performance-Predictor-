@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PredictFolio - AI Fund Predictor</title>
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" 
+  />
+</head>
+<body data-theme="dark">
+  <!-- -------------------- Page Loader -------------------- -->
+  <div class="page-loader">
+    <div class="background">
+      <div class="blob blob1"></div>
+      <div class="blob blob2"></div>
+      <div class="blob blob3"></div>
+    </div>
+    <div class="dot dot1"></div>
+    <div class="dot dot2"></div>
+    <div class="dot dot3"></div>
+    <div class="dot dot4"></div>
+    <div class="dot dot5"></div>
+    <div class="loader-logo-circle">
+      <i class="fa-solid fa-chart-line"></i>
+    </div>
+    <h2 class="loader-text">Predict<span>Folio</span></h2>
+  </div>
+
+  <!-- -------------------- Main Page Background -------------------- -->
+  <div class="background main-bg">
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+    <div class="blob blob3"></div>
+  </div>
+
+  <div class="dot dot1"></div>
+  <div class="dot dot2"></div>
+  <div class="dot dot3"></div>
+  <div class="dot dot4"></div>
+  <div class="dot dot5"></div>
+
+  <!-- -------------------- Main Content -------------------- -->
+  <main class="hero">
+    <!-- Logo -->
+    <div class="logo-circle bounce" id="finalLogo">
+      <i class="fa-solid fa-chart-line"></i>
+    </div>
+    <h1 class="title">Predict<span>Folio</span></h1>
+
+    <!-- Features -->
+    <div class="features">
+      <div class="feature">
+        <div class="icon-circle">
+          <i class="fa-solid fa-bullseye"></i>
+        </div>
+        <p>Accurate Predictions</p>
+      </div>
+
+      <div class="feature">
+        <div class="icon-circle">
+          <i class="fa-solid fa-chart-bar"></i>
+        </div>
+        <p>Real-Time Analytics</p>
+      </div>
+
+      <div class="feature">
+        <div class="icon-circle">
+          <i class="fa-solid fa-eye"></i>
+        </div>
+        <p>Future Insights</p>
+      </div>
+    </div>
+
+    <!-- Ticker -->
+    <div class="ticker-wrapper">
+      <div class="ticker">
+        <span class="green">NIFTY 50: ↗ +0.85%</span>
+        <span class="green">BSE SENSEX: ↗ +1.24%</span>
+        <span class="blue">NASDAQ: ↗ +0.67%</span>
+        <span class="gold">GOLD: ↗ +0.23%</span>
+        <span class="muted">AI PREDICTIONS: ACTIVE</span>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <p class="description">
+      Harness the power of artificial intelligence to make smarter mutual fund 
+      investment decisions. Get real-time predictions and insights across all 
+      major fund categories.
+    </p>
+
+    <!-- Button -->
+    <a href="login.html" class="start-btn">
+      Start Predicting <i class="fa-solid fa-arrow-right"></i>
+    </a>
+  </main>
+
+  <!-- -------------------- Theme Toggle Button -------------------- -->
+  <button id="theme-toggle" class="theme-toggle">
+    <i class="fa-solid fa-moon"></i>
+  </button>
+
+  <script>
+    const toggleBtn = document.getElementById("theme-toggle");
+    const body = document.body;
+
+    // Load saved theme
+    if (localStorage.getItem("theme")) {
+      body.setAttribute("data-theme", localStorage.getItem("theme"));
+    }
+
+    toggleBtn.addEventListener("click", () => {
+      const currentTheme = body.getAttribute("data-theme");
+      const newTheme = currentTheme === "dark" ? "light" : "dark";
+      body.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
+      toggleBtn.innerHTML = newTheme === "dark" 
+        ? '<i class="fa-solid fa-moon"></i>' 
+        : '<i class="fa-solid fa-sun"></i>';
+    });
+  </script>
+</body>
+</html>

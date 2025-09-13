@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PredictFolio - Fund Categories</title>
+  <link rel="stylesheet" href="css/funds.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <!-- Navbar -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <i class="fa-solid fa-chart-line"></i>
+    <span class="logo-predict">Predict</span><span class="logo-folio">Folio</span>
+  </a>
+  <div class="navbar-right">
+    <button class="theme-toggle" onclick="toggleTheme()">
+      <i class="fa-solid fa-moon" id="themeIcon"></i>
+    </button>
+    <div class="user-menu">
+      <i class="fa-solid fa-user"></i>
+      <div class="dropdown">
+        <a href="#">Profile</a>
+        <a href="#">Settings</a>
+        <a href="login.html">Logout</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+  <main class="funds-page">
+    <div class="background">
+      <div class="blob blob1"></div>
+      <div class="blob blob2"></div>
+      <div class="blob blob3"></div>
+      <div class="dot dot1"></div>
+      <div class="dot dot2"></div>
+      <div class="dot dot3"></div>
+      <div class="dot dot4"></div>
+      <div class="dot dot5"></div>
+    </div>
+
+    <div class="funds-container">
+      <h1 class="page-title">Choose a Fund Category</h1>
+      <p class="page-subtitle">Explore mutual fund types and start predictions.</p>
+
+      <div class="funds-grid">
+        <a href="coming-soon.html" class="fund-card large">
+          <div class="icon"><i class="fa-solid fa-city"></i></div>
+          <h3>Large Cap</h3>
+        </a>
+        <a href="coming-soon.html" class="fund-card mid">
+          <div class="icon"><i class="fa-solid fa-building"></i></div>
+          <h3>Mid Cap</h3>
+        </a>
+        <a href="coming-soon.html" class="fund-card small">
+          <div class="icon"><i class="fa-solid fa-home"></i></div>
+          <h3>Small Cap</h3>
+        </a>
+        <a href="coming-soon.html" class="fund-card flexi">
+          <div class="icon"><i class="fa-solid fa-layer-group"></i></div>
+          <h3>Flexi / Multi Allocation Fund</h3>
+        </a>
+        <a href="coming-soon.html" class="fund-card gold">
+          <div class="icon"><i class="fa-solid fa-coins"></i></div>
+          <h3>Gold / Silver Fund</h3>
+        </a>
+      </div>
+
+      <div class="home-button-wrapper">
+        <a href="index.html" class="home-btn">
+          <i class="fa-solid fa-house"></i> Home
+        </a>
+      </div>
+    </div>
+  </main>
+
+<script>
+  // Apply stored theme on load
+  document.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    document.body.setAttribute("data-theme", savedTheme);
+    updateThemeIcon(savedTheme);
+  });
+
+  function toggleTheme() {
+    const current = document.body.getAttribute("data-theme");
+    const next = current === "light" ? "dark" : "light";
+    document.body.setAttribute("data-theme", next);
+    localStorage.setItem("theme", next);
+    updateThemeIcon(next);
+  }
+
+  function updateThemeIcon(theme) {
+    const icon = document.getElementById("themeIcon");
+    if (theme === "light") {
+      icon.classList.remove("fa-sun");
+      icon.classList.add("fa-moon");
+    } else {
+      icon.classList.remove("fa-moon");
+      icon.classList.add("fa-sun");
+    }
+  }
+</script>
+
+</body>
+</html>

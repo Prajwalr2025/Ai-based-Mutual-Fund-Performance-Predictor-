@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PredictFolio - Sign Up</title>
+  <link rel="stylesheet" href="css/signup.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <!-- Theme Toggle Button (Top Right) -->
+  <button class="theme-toggle" onclick="toggleTheme()">
+    <i class="fa-solid fa-sun" id="theme-icon"></i>
+  </button>
+
+  <div class="signup-container">
+    <h1 class="signup-title">Create Your <span>PredictFolio</span> Account</h1>
+    <form id="signupForm" class="signup-form" action="funds.html" method="GET">
+      <div class="input-group">
+        <i class="fa-solid fa-user"></i>
+        <input type="text" id="name" placeholder="Full Name" required>
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-envelope"></i>
+        <input type="email" id="email" placeholder="Email Address" required>
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" id="password" placeholder="Password" required>
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+      </div>
+      <button type="submit" class="signup-btn">Sign Up</button>
+      <p class="login-text">Already have an account? <a href="login.html">Sign In</a></p>
+    </form>
+    <p id="error-message" style="color:#ff4d4d; margin-top:1rem;"></p>
+  </div>
+
+  <script>
+    // Signup Form Validation
+    const form = document.getElementById("signupForm");
+    const errorMessage = document.getElementById("error-message");
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault(); // stop default form submission
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+
+      if (!name || !email || !password || !confirmPassword) {
+        errorMessage.textContent = "All fields are required.";
+        return;
+      }
+
+      const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      if (!email.match(emailPattern)) {
+        errorMessage.textContent = "Please enter a valid email address.";
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        errorMessage.textContent = "Passwords do not match.";
+        return;
+      }
+
+      errorMessage.textContent = "";
+      form.submit(); 
+    });
+
+    // Theme Toggle
+    function toggleTheme() {
+      const current = document.body.getAttribute("data-theme");
+      const next = current === "light" ? "dark" : "light";
+      document.body.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+
+      // Change icon
+      const icon = document.getElementById("theme-icon");
+      if (next === "dark") {
+        icon.classList.remove("fa-sun");
+        icon.classList.add("fa-moon");
+      } else {
+        icon.classList.remove("fa-moon");
+        icon.classList.add("fa-sun");
+      }
+    }
+
+    // Apply stored theme on load
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedTheme = localStorage.getItem("theme") || "light";
+      document.body.setAttribute("data-theme", savedTheme);
+      const icon = document.getElementById("theme-icon");
+      if (savedTheme === "dark") {
+        icon.classList.remove("fa-sun");
+        icon.classList.add("fa-moon");
+      } else {
+        icon.classList.remove("fa-moon");
+        icon.classList.add("fa-sun");
+      }
+    });
+  </script>
+</body>
+</html>
