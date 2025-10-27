@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PredictFolio - PSU Cap Funds</title>
+  <!-- Main shared CSS file for theme, navbar, and backgrounds -->
+  <link rel="stylesheet" href="css/funds.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <style>
+    /* --- Custom Styles for Fund Selection Buttons (Consistent with other categories) --- */
+    
+    .funds-container {
+        /* Ensures the container respects the page padding */
+        max-width: 1400px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    
+    .category-fund-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        max-width: 500px; /* Constrain buttons in the center */
+        margin: 3rem auto;
+    }
+    
+    .fund-select-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.2rem 2rem;
+        border-radius: 0.75rem;
+        background: var(--card-bg); /* Use theme card background */
+        color: var(--text-color);
+        text-decoration: none;
+        font-size: 1.2rem;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
+        border: 1px solid rgba(0, 195, 255, 0.1);
+    }
+    
+    .fund-select-btn i {
+        margin-right: 15px;
+        font-size: 1.5rem;
+        color: #00c3ff; /* Accent blue for the icon */
+    }
+    
+    .fund-select-btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 255, 200, 0.4); /* Green/Cyan glow on hover */
+        background: rgba(0, 255, 200, 0.05); /* Slight tint on hover */
+    }
+
+    /* Responsive adjustment for mobile */
+    @media (max-width: 600px) {
+        .funds-page {
+            padding: 7rem 1.5rem 2rem 1.5rem;
+        }
+        .fund-select-btn {
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+        }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar (consistent across all pages) -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <i class="fa-solid fa-chart-line"></i>
+    <span class="logo-predict">Predict</span><span class="logo-folio">Folio</span>
+  </a>
+  <div class="navbar-right">
+    <button class="theme-toggle" onclick="toggleTheme()">
+      <i class="fa-solid fa-moon" id="themeIcon"></i>
+    </button>
+  </div>
+</nav>
+
+
+  <main class="funds-page">
+    <div class="background">
+      <div class="blob blob1"></div>
+      <div class="blob blob2"></div>
+      <div class="blob blob3"></div>
+      <div class="dot dot1"></div>
+      <div class="dot dot2"></div>
+      <div class="dot dot3"></div>
+      <div class="dot dot4"></div>
+      <div class="dot dot5"></div>
+    </div>
+
+    <div class="funds-container">
+      <h1 class="page-title">PSU Cap Funds</h1>
+      <p class="page-subtitle">Select a specific PSU Cap fund for a future return prediction.</p>
+
+      <div class="funds-grid category-fund-list">
+        <!-- Fund Buttons -->
+        <!-- Links pass 'category=psu' and the exact fund name for the API call -->
+        <a href="prediction_result.html?category=psu&fund=Aditya Birla Sun Life PSU Equity Fund" class="fund-select-btn">
+          <i class="fa-solid fa-chart-area"></i>
+          Aditya Birla Sun Life PSU Equity Fund
+        </a>
+        <a href="prediction_result.html?category=psu&fund=SBI PSU FUND" class="fund-select-btn">
+          <i class="fa-solid fa-chart-area"></i>
+          SBI PSU FUND
+        </a>
+      </div>
+
+      <div class="home-button-wrapper">
+        <a href="funds.html" class="home-btn">
+          <i class="fa-solid fa-arrow-left"></i> Back to Categories
+        </a>
+      </div>
+    </div>
+  </main>
+
+<script>
+  // Theme Toggling (copied for self-containment)
+  document.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    document.body.setAttribute("data-theme", savedTheme);
+    updateThemeIcon(savedTheme);
+  });
+
+  function toggleTheme() {
+    const current = document.body.getAttribute("data-theme");
+    const next = current === "light" ? "dark" : "light";
+    document.body.setAttribute("data-theme", next);
+    localStorage.setItem("theme", next);
+    updateThemeIcon(next);
+  }
+
+  function updateThemeIcon(theme) {
+    const icon = document.getElementById("themeIcon");
+    if (icon) {
+      if (theme === "light") {
+        icon.classList.remove("fa-sun");
+        icon.classList.add("fa-moon");
+      } else {
+        icon.classList.remove("fa-moon");
+        icon.classList.add("fa-sun");
+      }
+    }
+  }
+</script>
+</body>
+</html>

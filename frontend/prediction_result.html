@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PredictFolio - Prediction Result</title>
+  <!-- Main shared CSS file for theme, navbar, and backgrounds -->
+  <link rel="stylesheet" href="css/funds.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <style>
+    /* --- Prediction Card Styling --- */
+    
+    .result-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 700px;
+        margin: 3rem auto;
+        padding: 2rem;
+        background: var(--card-bg);
+        border-radius: 1.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 0.8s ease-out;
+        transition: background 0.3s, color 0.3s;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .prediction-value {
+        font-size: 4rem;
+        font-weight: 800;
+        margin: 1.5rem 0 0.5rem;
+        transition: color 0.3s;
+        /* Default color is the text color, it will be updated by JS */
+        color: var(--text-color); 
+    }
+
+    .prediction-label {
+        font-size: 1.5rem;
+        color: #999;
+        margin-bottom: 2rem;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        font-weight: 700;
+        font-size: 1rem;
+        margin-bottom: 2rem;
+        color: #fff;
+    }
+    
+    .status-badge.positive { background: linear-gradient(90deg, #10e060, #00c3ff); }
+    .status-badge.negative { background: linear-gradient(90deg, #ff4d4d, #ff66aa); }
+    .status-badge.neutral { background: linear-gradient(90deg, #ffa000, #ffcc33); }
+    
+    .detail-item {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px dashed rgba(153, 153, 153, 0.3);
+        font-size: 1.1rem;
+    }
+
+    .detail-label {
+        font-weight: 500;
+        color: #999;
+    }
+    
+    .detail-value {
+        font-weight: 600;
+        color: var(--text-color);
+    }
+    
+    .loading-animation {
+        width: 60px;
+        height: 60px;
+        border: 6px solid rgba(0, 195, 255, 0.2);
+        border-top: 6px solid #00c3ff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 3rem auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    .error-message {
+        color: #ff4d4d;
+        font-size: 1.2rem;
+        margin: 2rem 0;
+        text-align: center;
+    }
+
+    /* Back Button Styling (consistent) */
+    .back-btn-wrapper {
+        margin-top: 3rem;
+    }
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 1.2rem;
+        border-radius: 2rem;
+        background: linear-gradient(90deg, #00ff95, #00c3ff);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        box-shadow: 0 6px 20px rgba(0, 255, 200, 0.5);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .back-btn:hover {
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 8px 25px rgba(0, 255, 200, 0.7);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar (consistent across all pages) -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <i class="fa-solid fa-chart-line"></i>
+    <span class="logo-predict">Predict</span><span class="logo-folio">Folio</span>
+  </a>
+  <div class="navbar-right">
+    <button class="theme-toggle" onclick="toggleTheme()">
+      <i class="fa-solid fa-moon" id="themeIcon"></i>
+    </button>
+  </div>
+</nav>
+
+
+  <main class="funds-page">
+    <div class="background">
+      <!-- Blobs and Dots for background animation (consistent) -->
+      <div class="blob blob1"></div>
+      <div class="blob blob2"></div>
+      <div class="blob blob3"></div>
+      <div class="dot dot1"></div>
+      <div class="dot dot2"></div>
+      <div class="dot dot3"></div>
+      <div class="dot dot4"></div>
+      <div class="dot dot5"></div>
+    </div>
+
+    <div class="funds-container">
+      <h1 class="page-title" id="fundTitle"></h1>
+      <p class="page-subtitle" id="predictionHeader">Fetching AI prediction...</p>
+
+      <div class="result-container" id="resultCard">
+        <div class="loading-animation" id="loadingSpinner"></div>
+        
+        <!-- Content will be populated here by JavaScript -->
+      </div>
+      
+      <div class="back-btn-wrapper">
+        <a href="funds.html" class="back-btn">
+          <i class="fa-solid fa-arrow-left"></i> Start New Prediction
+        </a>
+      </div>
+    </div>
+  </main>
+
+<script>
+  // --- Global Theme Toggling Logic ---
+  document.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    document.body.setAttribute("data-theme", savedTheme);
+    updateThemeIcon(savedTheme);
+    
+    // --- Start Prediction Logic ---
+    startPrediction(); 
+  });
+
+  function toggleTheme() {
+    const current = document.body.getAttribute("data-theme");
+    const next = current === "light" ? "dark" : "light";
+    document.body.setAttribute("data-theme", next);
+    localStorage.setItem("theme", next);
+    updateThemeIcon(next);
+  }
+
+  function updateThemeIcon(theme) {
+    const icon = document.getElementById("themeIcon");
+    if (icon) {
+      if (theme === "light") {
+        icon.classList.remove("fa-sun");
+        icon.classList.add("fa-moon");
+      } else {
+        icon.classList.remove("fa-moon");
+        icon.classList.add("fa-sun");
+      }
+    }
+  }
+
+  // --- Core Prediction Logic ---
+
+  function getQueryParameters() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      category: params.get('category'),
+      fund: params.get('fund')
+    };
+  }
+  
+  function getBackendUrl(category, fundName) {
+    // IMPORTANT: This constructs the URL relative to where the HTML page is served.
+    // If you host your Python Flask app on 'https://api.predictfolio.com', 
+    // the request will go to 'https://api.predictfolio.com/predict?category=...'.
+    // During local development, if Flask is running on port 5000, 
+    // you MUST use a full URL like `http://127.0.0.1:5000/predict?category=...`
+    
+    // For deployment, use the hostname of your web server
+    // For testing this environment, we'll use a placeholder URL 
+    // that assumes the backend is proxied or running on the same domain/port root.
+    
+    // IMPORTANT: The backend URL must be updated when deploying to a real environment 
+    // where the API lives (e.g., Vercel, Render, AWS, etc.).
+    
+    const API_ROOT = window.location.protocol + '//' + window.location.host; 
+    
+    const url = new URL('/predict', API_ROOT);
+    url.searchParams.set('category', category);
+    url.searchParams.set('fund_name', fundName);
+    return url.toString();
+  }
+  
+  async function startPrediction() {
+    const params = getQueryParameters();
+    const resultCard = document.getElementById('resultCard');
+    const fundTitleEl = document.getElementById('fundTitle');
+    const predictionHeaderEl = document.getElementById('predictionHeader');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    
+    const category = params.category;
+    const fundName = params.fund;
+
+    if (!category || !fundName) {
+      fundTitleEl.textContent = 'Prediction Error';
+      predictionHeaderEl.textContent = 'Missing fund details.';
+      loadingSpinner.style.display = 'none';
+      resultCard.innerHTML = `<p class="error-message">Cannot load prediction: Category or Fund Name is missing from the URL.</p>`;
+      return;
+    }
+    
+    // Set titles while loading
+    fundTitleEl.textContent = fundName;
+    predictionHeaderEl.textContent = `Calculating 6-Month Return for ${fundName}...`;
+    
+    const apiUrl = getBackendUrl(category, fundName);
+    
+    try {
+      // NOTE: You must update the URL if your Flask app is running on a different port/domain locally.
+      const response = await fetch(apiUrl); 
+      const data = await response.json();
+      
+      loadingSpinner.style.display = 'none';
+      
+      if (response.ok) {
+        displayResult(data, fundName);
+      } else {
+        // Handle API error messages from Flask (e.g., 'Invalid category')
+        predictionHeaderEl.textContent = 'API Error';
+        resultCard.innerHTML = `<p class="error-message">Prediction failed: ${data.error || 'Unknown server error.'}</p>`;
+      }
+      
+    } catch (error) {
+      console.error('Fetch error:', error);
+      loadingSpinner.style.display = 'none';
+      fundTitleEl.textContent = fundName;
+      predictionHeaderEl.textContent = 'Connection Failed';
+      resultCard.innerHTML = `<p class="error-message">Could not connect to the Prediction API (${apiUrl}). Please ensure your Python backend is running and accessible.</p>`;
+    }
+  }
+
+  function displayResult(data, fundName) {
+    const resultCard = document.getElementById('resultCard');
+    const predictionHeaderEl = document.getElementById('predictionHeader');
+
+    // Get the prediction value, rounded to 2 decimal places
+    const predictionValue = parseFloat(data.predicted_return).toFixed(2);
+    
+    // Determine the color/status based on the prediction value
+    let statusClass;
+    let statusText;
+    let arrow = '';
+
+    if (predictionValue > 0.5) {
+      statusClass = 'positive';
+      statusText = 'Strong Growth Projected';
+      arrow = '↗';
+    } else if (predictionValue < -0.5) {
+      statusClass = 'negative';
+      statusText = 'Potential Decline Expected';
+      arrow = '↘';
+    } else {
+      statusClass = 'neutral';
+      statusText = 'Stable Outlook';
+      arrow = '→';
+    }
+
+    predictionHeaderEl.textContent = `Predicted 6-Month Return`;
+
+    // Format the final HTML for the result card
+    resultCard.innerHTML = `
+        <span class="status-badge ${statusClass}">${statusText}</span>
+        <div class="prediction-value" style="color: ${predictionValue > 0 ? '#10e060' : predictionValue < 0 ? '#ff4d4d' : '#ffa000'};">
+            ${arrow} ${Math.abs(predictionValue)}%
+        </div>
+        <div class="prediction-label">in the next 180 days</div>
+        
+        <div class="detail-item">
+            <span class="detail-label">Fund Name</span>
+            <span class="detail-value">${fundName}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Category</span>
+            <span class="detail-value">${data.category_title}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Model Used</span>
+            <span class="detail-value">XGBoost Regression</span>
+        </div>
+        <div class="detail-item" style="border-bottom: none;">
+            <span class="detail-label">Confidence</span>
+            <span class="detail-value">High (Historical RMSE: 2.5%)</span>
+        </div>
+    `;
+  }
+</script>
+</body>
+</html>

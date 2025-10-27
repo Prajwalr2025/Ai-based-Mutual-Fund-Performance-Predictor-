@@ -8,8 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-  <!-- Navbar -->
-<nav class="navbar">
+  <nav class="navbar">
   <a href="index.html" class="nav-logo">
     <i class="fa-solid fa-chart-line"></i>
     <span class="logo-predict">Predict</span><span class="logo-folio">Folio</span>
@@ -18,14 +17,6 @@
     <button class="theme-toggle" onclick="toggleTheme()">
       <i class="fa-solid fa-moon" id="themeIcon"></i>
     </button>
-    <div class="user-menu">
-      <i class="fa-solid fa-user"></i>
-      <div class="dropdown">
-        <a href="#">Profile</a>
-        <a href="#">Settings</a>
-        <a href="login.html">Logout</a>
-      </div>
-    </div>
   </div>
 </nav>
 
@@ -47,28 +38,32 @@
       <p class="page-subtitle">Explore mutual fund types and start predictions.</p>
 
       <div class="funds-grid">
-        <a href="coming-soon.html" class="fund-card large">
+        <a href="large_cap_funds.html" class="fund-card large">
           <div class="icon"><i class="fa-solid fa-city"></i></div>
           <h3>Large Cap</h3>
         </a>
-        <a href="coming-soon.html" class="fund-card mid">
+        <a href="mid_cap_funds.html" class="fund-card mid">
           <div class="icon"><i class="fa-solid fa-building"></i></div>
           <h3>Mid Cap</h3>
         </a>
-        <a href="coming-soon.html" class="fund-card small">
+        <a href="small_cap_funds.html" class="fund-card small">
           <div class="icon"><i class="fa-solid fa-home"></i></div>
           <h3>Small Cap</h3>
         </a>
-        <a href="coming-soon.html" class="fund-card flexi">
+        <a href="psu_cap_funds.html" class="fund-card flexi">
           <div class="icon"><i class="fa-solid fa-layer-group"></i></div>
-          <h3>Flexi / Multi Allocation Fund</h3>
+          <h3>PSU Cap</h3>
         </a>
-        <a href="coming-soon.html" class="fund-card gold">
+        <a href="gold_funds.html" class="fund-card gold">
           <div class="icon"><i class="fa-solid fa-coins"></i></div>
           <h3>Gold / Silver Fund</h3>
         </a>
       </div>
 
+      <div class="news-ticker-wrapper">
+        <div class="news-ticker" id="news-ticker-content">
+            </div>
+      </div>
       <div class="home-button-wrapper">
         <a href="index.html" class="home-btn">
           <i class="fa-solid fa-house"></i> Home
@@ -78,11 +73,24 @@
   </main>
 
 <script>
+  // Mock data based on search results for Indian Mutual Fund trends
+  const NEWS_HEADLINES = [
+    'Flexi-cap funds remain top performers, delivering winning returns in 2025.',
+    'Debt mutual funds see massive ₹1.02 lakh crore outflows in September due to quarter-end withdrawals.',
+    'SIP registrations hit a new record high, indicating strong retail investor confidence.',
+    'SEBI consultation paper released on simplifying the mutual fund folio opening process.',
+    'Concentration risk: 19 stocks corner half of all mutual fund equity inflows in 2025.',
+    'Axis MF launches new Arbitrage Passive FOF for stability and tax-efficiency.',
+    'Smallcap mutual funds see a decline; analysts debate if it’s a warning or a buying opportunity.',
+    'The AUM-weighted 1-year rolling returns for equity MFs turn negative for the first time since 2018.'
+  ];
+
   // Apply stored theme on load
   document.addEventListener("DOMContentLoaded", () => {
     const savedTheme = localStorage.getItem("theme") || "light";
     document.body.setAttribute("data-theme", savedTheme);
     updateThemeIcon(savedTheme);
+    populateNewsTicker();
   });
 
   function toggleTheme() {
@@ -95,13 +103,28 @@
 
   function updateThemeIcon(theme) {
     const icon = document.getElementById("themeIcon");
-    if (theme === "light") {
-      icon.classList.remove("fa-sun");
-      icon.classList.add("fa-moon");
-    } else {
-      icon.classList.remove("fa-moon");
-      icon.classList.add("fa-sun");
+    if (icon) {
+        if (theme === "light") {
+        icon.classList.remove("fa-sun");
+        icon.classList.add("fa-moon");
+        } else {
+        icon.classList.remove("fa-moon");
+        icon.classList.add("fa-sun");
+        }
     }
+  }
+
+  function populateNewsTicker() {
+    const tickerContent = document.getElementById('news-ticker-content');
+    if (!tickerContent) return;
+
+    // Create the news string by joining items with a separator
+    const newsHtml = NEWS_HEADLINES.map(item => 
+        `<span class="news-item"><i class="fa-solid fa-bell"></i> ${item}</span>`
+    ).join('');
+
+    // Duplicate the content to enable continuous scrolling animation
+    tickerContent.innerHTML = newsHtml + newsHtml;
   }
 </script>
 
